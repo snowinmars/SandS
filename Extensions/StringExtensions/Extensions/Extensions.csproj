@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>StringExtensions.Extensions</AssemblyName>
+    <RootNamespace>StringExtensions.Extensions</RootNamespace>
+  </PropertyGroup>
+
+</Project>

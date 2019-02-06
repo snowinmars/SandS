@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Bitwise.BitwiseOperations</AssemblyName>
+    <RootNamespace>Bitwise.BitwiseOperations</RootNamespace>
+  </PropertyGroup>
+
+</Project>
