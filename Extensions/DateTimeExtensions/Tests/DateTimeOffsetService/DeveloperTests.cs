@@ -84,7 +84,7 @@ namespace Tests
 
             try
             {
-                var newDateTime = dateTimeOffsetService.ConvertUtcTimeToOffset(dateTimeUtc, timeZoneInfo.Id);
+                var unused = dateTimeOffsetService.ConvertUtcTimeToOffset(dateTimeUtc, timeZoneInfo.Id);
             }
             catch (DaylightSavingTimeException)
             {

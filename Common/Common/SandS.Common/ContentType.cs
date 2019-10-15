@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Common.SandS
+﻿namespace SandS.Common
 {
     public enum ContentType
     {

@@ -1,8 +1,9 @@
 ﻿using System;
 
-namespace Common.SandS
+namespace SandS.Common
 {
-    public static class SandS
+    // ReSharper disable once AllowPublicClass
+    public static class CommonValues
     {
         public static Random Random { get; } = new Random();
         public static double SmallDouble { get; } = 0.000001d;

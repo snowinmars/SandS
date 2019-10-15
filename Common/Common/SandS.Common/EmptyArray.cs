@@ -1,4 +1,4 @@
-﻿namespace Common.SandS
+﻿namespace SandS.Common
 {
     public static class EmptyArray<T>
     {
