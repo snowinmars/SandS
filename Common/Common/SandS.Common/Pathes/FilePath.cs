@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace SandS.Common.Pathes
 {
-   // ReSharper disable once AllowPublicClass
+    // ReSharper disable once AllowPublicClass
     public sealed class FilePath : AbsolutePath,
                                    IComparable,
                                    IComparable<AbsolutePath>,

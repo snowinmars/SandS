@@ -27,8 +27,7 @@ namespace SandS.Common.Helpers
 
                 isRootFound = current.Parent is null || current.Root.FullName == current.Parent.FullName;
                 current = current.Parent;
-            }
-            while (!isRootFound);
+            } while (!isRootFound);
 
             return directories.ToArray();
         }

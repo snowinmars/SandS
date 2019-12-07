@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SandS.Tests.Architecture", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SandS.Tests.Base", "SandS.Tests.Base\SandS.Tests.Base.csproj", "{FB48644A-E81F-4758-ABC4-59CD70457686}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SandS.Common.Tests", "SandS.Common.Tests\SandS.Common.Tests.csproj", "{07F06B1F-96C1-43EC-A5A2-1232C41F7D45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{FB48644A-E81F-4758-ABC4-59CD70457686}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB48644A-E81F-4758-ABC4-59CD70457686}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB48644A-E81F-4758-ABC4-59CD70457686}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07F06B1F-96C1-43EC-A5A2-1232C41F7D45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07F06B1F-96C1-43EC-A5A2-1232C41F7D45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07F06B1F-96C1-43EC-A5A2-1232C41F7D45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07F06B1F-96C1-43EC-A5A2-1232C41F7D45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,9 +4,6 @@
     {
         private static readonly T[] InstanceInternal = new T[0];
 
-        public static T[] Instance
-        {
-            get { return InstanceInternal; }
-        }
+        public static T[] Instance => InstanceInternal;
     }
 }

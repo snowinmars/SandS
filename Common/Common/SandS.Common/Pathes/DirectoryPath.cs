@@ -32,13 +32,20 @@ namespace SandS.Common.Pathes
         public override string Name => new DirectoryInfo(RawPath).Name;
 
         [JsonIgnore]
-        public override DirectoryPath Parent => Directory.GetParent(RawPath).ToDirectoryPath();
+        public override DirectoryPath Parent => Directory.GetParent(RawPath)?.ToDirectoryPath();
 
         public override bool Exists => Directory.Exists(RawPath);
 
         public bool IsEmpty =>
             !FindChildFiles().Any() &&
             !FindChildDirectories().Any();
+
+        public DirectoryPath Root => Directory.GetDirectoryRoot(RawPath).ToDirectoryPath();
+
+        public DirectoryPath Clone()
+        {
+            return new DirectoryPath(RawPath);
+        }
 
         public DirectoryPath CombineDirectory(string path1)
         {
@@ -253,34 +260,34 @@ namespace SandS.Common.Pathes
             return FileSearchEngine.FindBelow(RawPath.ToFilePath(), pattern, SearchOption.TopDirectoryOnly);
         }
 
-        public void Touch()
+        public DirectoryPath Touch()
         {
             if (Exists)
             {
-                return;
+                return this;
             }
 
             if (!Parent.Exists)
             {
-                Parent.Touch();
+                return Parent.Touch();
             }
 
-            Directory.CreateDirectory(RawPath);
+            return Directory.CreateDirectory(RawPath).ToDirectoryPath();
         }
 
-        public async Task TouchAsync()
+        public async Task<DirectoryPath> TouchAsync()
         {
             if (Exists)
             {
-                return;
+                return this;
             }
 
             if (!Parent.Exists)
             {
-                await Parent.TouchAsync();
+                return await Parent.TouchAsync();
             }
 
-            Directory.CreateDirectory(RawPath);
+            return Directory.CreateDirectory(RawPath).ToDirectoryPath();
         }
     }
 }

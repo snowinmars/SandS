@@ -9,7 +9,7 @@ namespace SandS.Common.Helpers
 {
     internal class SyncFileHelper
     {
-         public SyncFileHelper(Action<string> logAction)
+        public SyncFileHelper(Action<string> logAction)
         {
             this.logAction = logAction;
         }

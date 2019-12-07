@@ -11,7 +11,7 @@ namespace SandS.Common.Helpers
 {
     internal class AsyncFileHelper
     {
-         public AsyncFileHelper(Action<string> logAction)
+        public AsyncFileHelper(Action<string> logAction)
         {
             this.logAction = logAction;
         }

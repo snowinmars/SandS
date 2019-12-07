@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -9,6 +8,8 @@ namespace SandS.Common
     // ReSharper disable once AllowPublicClass
     public static class Randomize
     {
+        private const TextSettings DefaultTextSettings = TextSettings.AllowSmallLetters;
+
         private static readonly Random Random = new Random();
 
         public static bool Bool()
@@ -16,9 +17,68 @@ namespace SandS.Common
             return Int(0, 2) == 0;
         }
 
-        public static char Char(bool isFirstLetterUp = false)
+        public static char Char(TextSettings settings = DefaultTextSettings)
         {
-            return (char)Random.Next(97, 122);
+            var smallLettersRange = (min: 97, max: 122);
+            var bigLettersRange = (min: 65, max: 90);
+            var numbersRange = (min: 48, max: 57);
+            var spaceRange = (min: 32, max: 32);
+
+            var punctuationRanges = new[]
+            {
+                (min: 33, max: 47), (min: 58, max: 64), (min: 91, max: 96), (min: 123, max: 126),
+            };
+
+            var ranges = new List<(int min, int max)>();
+
+            if (settings.HasFlag(TextSettings.AllowSmallLetters))
+            {
+                ranges.Add(smallLettersRange);
+            }
+
+            if (settings.HasFlag(TextSettings.AllowBigLetters))
+            {
+                ranges.Add(bigLettersRange);
+            }
+
+            if (settings.HasFlag(TextSettings.AllowPunctuation))
+            {
+                ranges.AddRange(punctuationRanges);
+            }
+
+            if (settings.HasFlag(TextSettings.AllowNumbers))
+            {
+                ranges.Add(numbersRange);
+            }
+
+            if (settings.HasFlag(TextSettings.AllowSpace))
+            {
+                ranges.Add(spaceRange);
+            }
+
+            var collapsedRange = new List<int>();
+
+            foreach (var (min, max) in ranges)
+            {
+                for (var i = min; i < max; i++)
+                {
+                    collapsedRange.Add(i);
+                }
+            }
+
+            var c = (char)From(collapsedRange);
+
+            if (settings.HasFlag(TextSettings.IsFirstLetterUp))
+            {
+                c = char.ToUpperInvariant(c);
+            }
+
+            return c;
+        }
+
+        public static T From<T>(ICollection<T> collection)
+        {
+            return collection.ElementAt(Int(0, collection.Count - 1));
         }
 
         public static double Double()
@@ -28,6 +88,13 @@ namespace SandS.Common
 
         public static double Double(double min, double max)
         {
+            if (min > max)
+            {
+                var tmp = min;
+                min = max;
+                max = tmp;
+            }
+
             return (Random.NextDouble() * (max - min)) + min;
         }
 
@@ -38,6 +105,13 @@ namespace SandS.Common
 
         public static int Int(int min, int max)
         {
+            if (min > max)
+            {
+                var tmp = min;
+                min = max;
+                max = tmp;
+            }
+
             return Random.Next(min, max);
         }
 
@@ -76,11 +150,21 @@ namespace SandS.Common
 
         public static double PositiveDouble(double threshold)
         {
+            if (threshold < 0)
+            {
+                threshold = -threshold;
+            }
+
             return Double(0, threshold);
         }
 
         public static int PositiveInt(int threshold)
         {
+            if (threshold < 0)
+            {
+                threshold = -threshold;
+            }
+
             return Int(0, threshold);
         }
 
@@ -121,26 +205,53 @@ namespace SandS.Common
             return Enumerable(getElement, length).ToArray();
         }
 
-        public static string String(bool isFirstLetterUp = false)
+        public static string String(TextSettings settings = DefaultTextSettings)
         {
-            return String(Int(16, 32), isFirstLetterUp);
+            return String(Int(16, 32), settings);
         }
 
-        public static string String(int length, bool isFirstLetterUp = false)
+        public static string String(int length, TextSettings settings = DefaultTextSettings)
         {
+            return String(length, length, settings);
+        }
+
+        public static string String(int minLength, int maxLength, TextSettings settings = DefaultTextSettings)
+        {
+            var length = Int(minLength, maxLength);
             var sb = new StringBuilder(length);
+
+            var isFirstLetterUp = settings.HasFlag(TextSettings.IsFirstLetterUp);
+            settings = settings & ~TextSettings.IsFirstLetterUp;
 
             for (var j = 0; j < length; j++)
             {
-                sb.Append(Char());
+                sb.Append(Char(settings));
             }
 
             if (isFirstLetterUp)
             {
-                sb[0] = char.ToUpper(sb[0], CultureInfo.CurrentCulture);
+                sb[0] = char.ToUpperInvariant(sb[0]);
             }
 
             return sb.ToString();
+        }
+
+        [Flags]
+        public enum TextSettings
+        {
+            IsFirstLetterUp = 1,
+
+            AllowSmallLetters = 2,
+
+            AllowBigLetters = 4,
+
+            AllowPunctuation = 8,
+
+            AllowNumbers = 16,
+
+            AllowSpace = 32,
+
+            AllowNonAsciiChars, // TODO [snowinmars]
         }
     }
 }

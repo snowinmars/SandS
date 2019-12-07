@@ -19,12 +19,12 @@ namespace SandS.Tests.Architecture
         {
             settings = await GetSettingsAsync();
         }
-        
+
         [Test]
         public void Projects_ShouldHave_AssemblyPrefix_Async()
         {
             const string pattern = @".*?<AssemblyName>(.*?)<\/AssemblyName>";
-            
+
             var solution = DirectoryPath.Current.FindParentFile("*.sln");
 
             if (solution is null)
@@ -74,7 +74,7 @@ namespace SandS.Tests.Architecture
         public void Projects_ShouldHave_NamespacePrefix_Async()
         {
             const string pattern = @".*?<RootNamespace>(.*?)<\/RootNamespace>";
-            
+
             var solution = DirectoryPath.Current.FindParentFile("*.sln");
 
             if (solution is null)
