@@ -1,9 +1,6 @@
 ﻿using System;
 
-using DateTimeExtension.Abstractions;
-using DateTimeExtension.Services;
-
-namespace DateTimeExtensions.Extensions
+namespace DateTimeExtension.Extensions
 {
     public static partial class Extensions
     {

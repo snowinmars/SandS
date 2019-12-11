@@ -1,17 +1,13 @@
 ﻿using System;
-
+using System.Linq;
 using DateTimeExtension.Abstractions;
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using DateTimeExtension.Entities;
 using DateTimeExtension.Services;
+using Xunit;
 
-namespace Tests
+namespace DateTimeExtension.Tests
 {
     // TODO: [DT] these tests are intended to be developer's helpers. They are not real 'tests', they are data generators. If we don't need the dateTimeOffsetService, we should remove it and these tests
-    [Ignore]
-    [TestClass]
     public class DateTimeOffsetServiceTests
     {
         private static readonly TimeZoneInfo[] timeZoneInfos;
@@ -24,9 +20,9 @@ namespace Tests
         {
             timeZoneInfos = new[]
             {
-                TimeZoneInfo.FindSystemTimeZoneById("GTB Standard Time"), // UTC+2
+                TimeZoneInfo.GetSystemTimeZones().First(x => x.BaseUtcOffset.Hours == 2),
                 TimeZoneInfo.Utc,
-                TimeZoneInfo.FindSystemTimeZoneById("Aleutian Standard Time"), // UTC-10
+                TimeZoneInfo.GetSystemTimeZones().First(x => x.BaseUtcOffset.Hours == -10),
             };
 
             var now = DateTime.UtcNow;
@@ -39,13 +35,12 @@ namespace Tests
             };
         }
 
-        [TestInitialize]
-        public void TestInitialize()
+        public DateTimeOffsetServiceTests()
         {
             dateTimeOffsetService = new DateTimeOffsetService();
         }
 
-        [TestMethod]
+        [Fact]
         public void NewConvertFromUtcToUtcShouldDoNothing()
         {
             foreach (var timeZoneInfo in timeZoneInfos)
@@ -58,7 +53,7 @@ namespace Tests
                         dateTimeUtc,
                         offset.UtcDateTime);
 
-                    Assert.IsTrue(areEquals);
+                    Assert.True(areEquals);
 
                     var utcOffset = dateTimeOffsetService.ChangeOffset(offset, TimeZoneInfo.Utc.Id);
                     var locationOffset = dateTimeOffsetService.ChangeOffset(utcOffset, timeZoneInfo.Id);
@@ -67,13 +62,13 @@ namespace Tests
                         dateTimeUtc,
                         locationOffset.UtcDateTime);
 
-                    Assert.IsTrue(areEquals);
+                    Assert.True(areEquals);
                 }
             }
         }
 
 
-        [TestMethod]
+        [Fact]
         public void ConvertUtcToLocationTimeWithDaylightSavingShouldReturnEqualValues()
         {
             var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Mid-Atlantic Standard Time");
@@ -91,10 +86,10 @@ namespace Tests
                 isSuccessed = true;
             }
 
-            Assert.IsTrue(isSuccessed);
+            Assert.True(isSuccessed);
         }
 
-        [TestMethod]
+        [Fact]
         public void ChangeOffsetTimeZoneShouldWorkAsConvertTimeBySystemTimeZoneId()
         {
             foreach (var timeZoneInfo1 in timeZoneInfos)
@@ -110,7 +105,7 @@ namespace Tests
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void ChangeOffsetTimeZoneWithDaylightSavingShouldWorkAsConvertTimeBySystemTimeZoneId()
         {
             var timeZoneInfo1 = TimeZoneInfo.FindSystemTimeZoneById("Bougainville Standard Time");
@@ -130,10 +125,10 @@ namespace Tests
                 isSuccessed = true;
             }
 
-            Assert.IsTrue(isSuccessed);
+            Assert.True(isSuccessed);
         }
 
-        [TestMethod]
+        [Fact]
         public void GreaterOperation()
         {
             var now = DateTime.UtcNow;
@@ -146,25 +141,25 @@ namespace Tests
             bool result;
 
             result = dateTimeOffsetService.IsLeftGreaterRight(lessDateTime, TimeZoneInfo.Utc, greaterDateTimeOffset);
-            Assert.IsFalse(result);
+            Assert.False(result);
 
             result = dateTimeOffsetService.IsLeftGreaterRight(greaterDateTimeOffset, lessDateTime, TimeZoneInfo.Utc);
-            Assert.IsTrue(result);
+            Assert.True(result);
 
             result = dateTimeOffsetService.IsLeftGreaterRight(lessDateTimeOffset, greaterDateTimeOffset);
-            Assert.IsFalse(result);
+            Assert.False(result);
 
             result = dateTimeOffsetService.IsLeftGreaterRight(greaterDateTimeOffset, lessDateTimeOffset);
-            Assert.IsTrue(result);
+            Assert.True(result);
 
             result = dateTimeOffsetService.IsLeftGreaterRight(lessDateTime, greaterDateTime);
-            Assert.IsFalse(result);
+            Assert.False(result);
 
             result = dateTimeOffsetService.IsLeftGreaterRight(greaterDateTime, lessDateTime);
-            Assert.IsTrue(result);
+            Assert.True(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void EqualsOperation()
         {
             var now = DateTime.UtcNow;
@@ -179,31 +174,31 @@ namespace Tests
             bool result;
 
             result = dateTimeOffsetService.AreEquals(equalsDateTime1, equalsDateTime2);
-            Assert.IsTrue(result);
+            Assert.True(result);
 
             result = dateTimeOffsetService.AreEquals(equalsDateTime2, equalsDateTime1);
-            Assert.IsTrue(result);
+            Assert.True(result);
 
             result = dateTimeOffsetService.AreEquals(equalsDateTime1, nonEqualsDateTime);
-            Assert.IsFalse(result);
+            Assert.False(result);
 
             result = dateTimeOffsetService.AreEquals(equalsDateTime2, nonEqualsDateTime);
-            Assert.IsFalse(result);
+            Assert.False(result);
 
             result = dateTimeOffsetService.AreEquals(equalsDateTimeOffset1, equalsDateTimeOffset2);
-            Assert.IsTrue(result);
+            Assert.True(result);
 
             result = dateTimeOffsetService.AreEquals(equalsDateTimeOffset2, equalsDateTimeOffset1);
-            Assert.IsTrue(result);
+            Assert.True(result);
 
             result = dateTimeOffsetService.AreEquals(equalsDateTimeOffset1, nonEqualsDateTimeOffset);
-            Assert.IsFalse(result);
+            Assert.False(result);
 
             result = dateTimeOffsetService.AreEquals(equalsDateTimeOffset2, nonEqualsDateTimeOffset);
-            Assert.IsFalse(result);
+            Assert.False(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void LessOperation()
         {
             var now = DateTime.UtcNow;
@@ -216,22 +211,22 @@ namespace Tests
             bool result;
 
             result = dateTimeOffsetService.IsLeftLessRight(lessDateTime, TimeZoneInfo.Utc, greaterDateTimeOffset);
-            Assert.IsTrue(result);
+            Assert.True(result);
 
             result = dateTimeOffsetService.IsLeftLessRight(greaterDateTimeOffset, lessDateTime, TimeZoneInfo.Utc);
-            Assert.IsFalse(result);
+            Assert.False(result);
 
             result = dateTimeOffsetService.IsLeftLessRight(lessDateTimeOffset, greaterDateTimeOffset);
-            Assert.IsTrue(result);
+            Assert.True(result);
 
             result = dateTimeOffsetService.IsLeftLessRight(greaterDateTimeOffset, lessDateTimeOffset);
-            Assert.IsFalse(result);
+            Assert.False(result);
 
             result = dateTimeOffsetService.IsLeftLessRight(lessDateTime, greaterDateTime);
-            Assert.IsTrue(result);
+            Assert.True(result);
 
             result = dateTimeOffsetService.IsLeftLessRight(greaterDateTime, lessDateTime);
-            Assert.IsFalse(result);
+            Assert.False(result);
         }
 
         private void EnsureDaylightSavingIsStillSame(DateTime utcTime, DateTime locationTime, TimeZoneInfo timeZoneInfo)
